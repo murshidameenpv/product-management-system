@@ -5,7 +5,8 @@ export default {
   theme: {
     extend: {
       colors: {
-       yellow:"#eda415"
+        yellow: "#eda415",
+        navblue: "#003f62",
       },
     },
   },
