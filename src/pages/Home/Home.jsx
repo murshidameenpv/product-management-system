@@ -1,7 +1,9 @@
 import { useState } from "react";
 import { FaChevronDown, FaChevronRight } from "react-icons/fa";
 import Cards from "../../components/Cards";
-
+import CategoryModal from "../../components/CategoryModal.jsx";
+import SubCategoryModal from "../../components/SubCategoryModal.jsx";
+import AddProduct from "../../components/AddProduct.jsx";
 const Home = () => {
   const [open, setOpen] = useState({
     all: false,
@@ -36,30 +38,29 @@ const Home = () => {
       price: "455",
     },
     {
-      id: 2,
+      id: 4,
       name: "Product 2",
       image: "https://via.placeholder.com/150",
       price: "455",
     },
     {
-      id: 3,
-      name: "Product 3",
+      id: 5,
+      name: "Product 22",
       image: "https://via.placeholder.com/150",
       price: "455",
     },
     {
-      id: 2,
+      id: 6,
       name: "Product 2",
       image: "https://via.placeholder.com/150",
       price: "455",
     },
     {
-      id: 3,
+      id: 7,
       name: "Product 3",
       image: "https://via.placeholder.com/150",
       price: "455",
     },
-    // Add more products as needed
   ];
   return (
     <div className="h-screen grid grid-cols-12">
@@ -103,16 +104,28 @@ const Home = () => {
       </div>
       <div className="col-span-10  px-4 py-8 relative mx-2 my-4 overflow-auto custom-scrollbar">
         <div className="absolute top-0 right-0 flex gap-4">
-          <button className="btn bg-yellow text-white rounded-2xl">
+          <button
+            className="btn bg-yellow text-white rounded-2xl"
+            onClick={() => document.getElementById("my_modal_4").showModal()}
+          >
             Add Product
           </button>
-          <button className="btn bg-yellow text-white rounded-2xl">
+          <button
+            className="btn bg-yellow text-white rounded-2xl"
+            onClick={() => document.getElementById("my_modal_6").showModal()}
+          >
             Add Category
           </button>
-          <button className="btn bg-yellow text-white rounded-2xl">
+          <button
+            className="btn bg-yellow text-white rounded-2xl"
+            onClick={() => document.getElementById("my_modal_5").showModal()}
+          >
             Add Subcategory
           </button>
         </div>
+        <CategoryModal />
+        <SubCategoryModal />
+        <AddProduct />
         <div className="grid grid-cols-3 gap-4 justify-items-center pt-16 mx-3 px-3 py-2 ">
           {products.map((product) => (
             <Cards key={product.id} product={product} />
