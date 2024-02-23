@@ -3,6 +3,7 @@ import MainLayout from "../layout/MainLayout";
 import Home from "../pages/Home/Home";
 import Signup from "../components/Signup";
 import Login from "../components/Login";
+import ProductDetails from "../pages/Product/ProductDetails";
 const router = createBrowserRouter([
   {
     path: "/",
@@ -12,6 +13,10 @@ const router = createBrowserRouter([
         path: "/",
         element: <Home />,
       },
+      {
+        path: "/product-details",
+        element:<ProductDetails/>
+      }
     ],
   },
   //Signup page will no have header and footr so it wont have childs

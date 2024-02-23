@@ -1,9 +1,5 @@
 const Footer = () => {
-  return (
-    <div className="bg-navblue text-white text-center">
-      <p>All right Reserved </p>
-    </div>
-  );
+  return <div className="bg-navblue text-white text-center"></div>;
 };
 
 export default Footer;
