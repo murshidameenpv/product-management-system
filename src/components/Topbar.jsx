@@ -2,6 +2,7 @@ import { FaUser } from "react-icons/fa";
 import { AiOutlineShoppingCart } from "react-icons/ai";
 import { FaRegHeart } from "react-icons/fa6";
 import { IoIosLogOut } from "react-icons/io";
+import Cart from "./Cart";
 
 const Topbar = () => {
   const isAuthenticated = true;
@@ -26,21 +27,21 @@ const Topbar = () => {
           )}
         </div>
 
-        <div className="indicator">
-          <AiOutlineShoppingCart className="text-2xl" />
-
-          {isAuthenticated ? (
-            <span className="badge badge-sm indicator-item">{8}</span>
-          ) : (
-            <span className="badge badge-sm indicator-item">0</span>
-          )}
-        </div>
+        {!isAuthenticated ? (
+          <div className="indicator">
+            <AiOutlineShoppingCart className="text-2xl " />
+            <span className="badge badge-sm indicator-item">{0}</span>
+          </div>
+        ) : (
+          <div className="indicator">
+            <Cart />
+          </div>
+        )}
 
         <FaUser className="text-2xl" />
         <IoIosLogOut className="text-2xl" />
       </div>
     </div>
   );
-};
-
+}
 export default Topbar;
