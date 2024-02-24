@@ -3,11 +3,11 @@ import { Link, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { validation } from "../utils/yupValidation.js";
-import useAxiosPublic from "../hooks/useAxiosPublic";
 import { useState } from "react";
+import useAuth from "../hooks/useAuth.jsx";
 
 const Signup = () => {
-  const axiosPublic = useAxiosPublic();
+  const {createUser} = useAuth()
   const [errorMessage, setErrorMessage] = useState("");
   const navigate = useNavigate();
   const {
@@ -21,11 +21,7 @@ const Signup = () => {
   });
   const onSubmit = async (data) => {
     try {
-      const response = await axiosPublic.post("/signup", {
-        userName: data.userName,
-        password: data.password,
-        email: data.email,
-      });
+     const response = await createUser(data.email, data.password,data.userName);
       if (response.status === 200) navigate("/");
       reset();
     } catch (error) {

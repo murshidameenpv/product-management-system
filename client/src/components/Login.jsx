@@ -3,9 +3,11 @@ import { Link, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import useAxiosPublic from "../hooks/useAxiosPublic";
 import { useState } from "react";
+import useAuth from "../hooks/useAuth.jsx";
+
 
 const Login = () => {
-  const axiosPublic = useAxiosPublic();
+  const { login } = useAuth();
   const navigate = useNavigate();
   const [errorMessage, setErrorMessage] = useState("");
 
@@ -17,10 +19,10 @@ const Login = () => {
   } = useForm();
   const onSubmit = async (data) => {
     try {
-      const response = await axiosPublic.post("/login", {
-        password: data.password,
-        email: data.email,
-      });
+      const response = await login(
+        data.email,
+        data.password,
+      );
       if (response.status === 200) navigate("/");
       reset();
     } catch (error) {
