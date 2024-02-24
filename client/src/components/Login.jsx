@@ -1,13 +1,12 @@
 /* eslint-disable no-unused-vars */
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
-import useAxiosPublic from "../hooks/useAxiosPublic";
+
 import { useState } from "react";
 import useAuth from "../hooks/useAuth.jsx";
 
-
 const Login = () => {
-  const { login } = useAuth();
+  const { login, user } = useAuth();
   const navigate = useNavigate();
   const [errorMessage, setErrorMessage] = useState("");
 
@@ -19,10 +18,7 @@ const Login = () => {
   } = useForm();
   const onSubmit = async (data) => {
     try {
-      const response = await login(
-        data.email,
-        data.password,
-      );
+      const response = await login(data.email, data.password);
       if (response.status === 200) navigate("/");
       reset();
     } catch (error) {
@@ -30,6 +26,10 @@ const Login = () => {
       setErrorMessage(error?.response?.data?.message);
     }
   };
+    if (user) {
+      navigate("/");
+      return null;
+    }
   return (
     <div className="flex w-screen h-screen">
       <div className="w-3/5 p-10 flex items-center justify-center flex-col">

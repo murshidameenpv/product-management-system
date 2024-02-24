@@ -7,9 +7,10 @@ import { useState } from "react";
 import useAuth from "../hooks/useAuth.jsx";
 
 const Signup = () => {
-  const {createUser} = useAuth()
+  const {createUser,user} = useAuth()
   const [errorMessage, setErrorMessage] = useState("");
   const navigate = useNavigate();
+
   const {
     register,
     handleSubmit,
@@ -29,7 +30,10 @@ const Signup = () => {
       setErrorMessage(error?.response?.data?.message);
     }
   };
-
+  if (user) {
+    navigate("/");
+    return null;
+  }
   return (
     <div className="flex w-screen h-screen">
       <div

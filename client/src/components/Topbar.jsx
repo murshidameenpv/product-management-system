@@ -3,9 +3,12 @@ import { AiOutlineShoppingCart } from "react-icons/ai";
 import { FaRegHeart } from "react-icons/fa6";
 import { IoIosLogOut } from "react-icons/io";
 import Cart from "./Cart";
+import useAuth from "../hooks/useAuth";
+
 
 const Topbar = () => {
-  const isAuthenticated = true;
+    const { isAuthenticated, 
+logOut } = useAuth();
   return (
     <div className="flex items-center justify-between bg-navblue p-4">
       <div className="w-1/3"></div>
@@ -39,7 +42,9 @@ const Topbar = () => {
         )}
 
         <FaUser className="text-2xl" />
+        <div onClick={logOut}>
         <IoIosLogOut className="text-2xl" />
+        </div>
       </div>
     </div>
   );

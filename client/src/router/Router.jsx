@@ -4,10 +4,16 @@ import Home from "../pages/Home/Home";
 import Signup from "../components/Signup.jsx";
 import Login from "../components/Login.jsx";
 import ProductDetails from "../pages/Product/ProductDetails.jsx";
+import PrivateRouter from "../pages/PrivateRoute/PrivateRoute.jsx";
+
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <MainLayout />,
+    element: (
+      <PrivateRouter>
+        <MainLayout />
+      </PrivateRouter>
+    ),
     children: [
       {
         path: "/",
@@ -15,8 +21,8 @@ const router = createBrowserRouter([
       },
       {
         path: "/product-details",
-        element:<ProductDetails/>
-      }
+        element: <ProductDetails />,
+      },
     ],
   },
   //Signup page will no have header and footr so it wont have childs
@@ -29,4 +35,5 @@ const router = createBrowserRouter([
     element: <Login />,
   },
 ]);
+
 export default router;

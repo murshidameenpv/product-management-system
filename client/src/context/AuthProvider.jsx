@@ -10,31 +10,33 @@ function AuthProvider({ children }) {
   const [loading, setLoading] = useState(true);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
 
-  const createUser = async (email, password, userName) => {
-    setLoading(true);
-    const response = await axiosPublic.post("/api/signup", {
-      email,
-      password,
-      userName,
-    });
-    if (response.data.token) {
-      localStorage.setItem("access_token", response.data.token);
-    }
-    setUser(response.data.user);
-    setLoading(false);
-    return response;
-  };
+const createUser = async (email, password, userName) => {
+  setLoading(true);
+  const response = await axiosPublic.post("/api/signup", {
+    email,
+    password,
+    userName,
+  });
+  if (response.data.token) {
+    localStorage.setItem("access_token", response.data.token);
+    localStorage.setItem("user", JSON.stringify(response.data.user)); // store user data in local storage
+  }
+  setUser(response.data.user);
+  setLoading(false);
+  return response;
+};
 
-  const login = async (email, password) => {
-    setLoading(true);
-    const response = await axiosPublic.post("/api/login", { email, password });
-    if (response.data.token) {
-      localStorage.setItem("access_token", response.data.token);
-    }
-    setUser(response.data.user);
-    setLoading(false);
-    return response;
-  };
+const login = async (email, password) => {
+  setLoading(true);
+  const response = await axiosPublic.post("/api/login", { email, password });
+  if (response.data.token) {
+    localStorage.setItem("access_token", response.data.token);
+    localStorage.setItem("user", JSON.stringify(response.data.user)); // store user data in local storage
+  }
+  setUser(response.data.user);
+  setLoading(false);
+  return response;
+};
 
   const logOut = () => {
     setUser(null);
@@ -61,7 +63,14 @@ function AuthProvider({ children }) {
     if (user) {
       checkAuth();
     }
-  }, [axiosPublic, user]);
+  }, [user]);
+  useEffect(() => {
+    const storedUser = localStorage.getItem("user");
+    if (storedUser) {
+      setUser(JSON.parse(storedUser));
+    }
+    setLoading(false);
+  }, []);
 
   const authInfo = {
     user,
@@ -71,7 +80,6 @@ function AuthProvider({ children }) {
     logOut,
     isAuthenticated,
   };
-console.log(user,"ppppppppppppppppp");
   return (
     <AuthContext.Provider value={authInfo}>{children}</AuthContext.Provider>
   );
