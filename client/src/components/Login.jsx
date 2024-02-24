@@ -1,6 +1,33 @@
-import { Link } from "react-router-dom";
+/* eslint-disable no-unused-vars */
+import { Link, useNavigate } from "react-router-dom";
+import { useForm } from "react-hook-form";
+import useAxiosPublic from "../hooks/useAxiosPublic";
+import { useState } from "react";
 
 const Login = () => {
+  const axiosPublic = useAxiosPublic();
+  const navigate = useNavigate();
+  const [errorMessage, setErrorMessage] = useState("");
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    reset,
+  } = useForm();
+  const onSubmit = async (data) => {
+    try {
+      const response = await axiosPublic.post("/login", {
+        password: data.password,
+        email: data.email,
+      });
+      if (response.status === 200) navigate("/");
+      reset();
+    } catch (error) {
+      console.log(error, "Error Signing up");
+      setErrorMessage(error?.response?.data?.message);
+    }
+  };
   return (
     <div className="flex w-screen h-screen">
       <div className="w-3/5 p-10 flex items-center justify-center flex-col">
@@ -8,7 +35,7 @@ const Login = () => {
           Sign in to <br /> Your Account
         </h1>
 
-        <form className="card-body w-[350px]">
+        <form className="card-body w-[350px]" onSubmit={handleSubmit(onSubmit)}>
           {/* Email */}
           <div className="form-control">
             <label className="input input-bordered flex items-center gap-2">
@@ -21,7 +48,12 @@ const Login = () => {
                 <path d="M2.5 3A1.5 1.5 0 0 0 1 4.5v.793c.026.009.051.02.076.032L7.674 8.51c.206.1.446.1.652 0l6.598-3.185A.755.755 0 0 1 15 5.293V4.5A1.5 1.5 0 0 0 13.5 3h-11Z" />
                 <path d="M15 6.954 8.978 9.86a2.25 2.25 0 0 1-1.956 0L1 6.954V11.5A1.5 1.5 0 0 0 2.5 13h11a1.5 1.5 0 0 0 1.5-1.5V6.954Z" />
               </svg>
-              <input type="text" className="grow" placeholder="Email" />
+              <input
+                type="text"
+                className="grow"
+                placeholder="Email"
+                {...register("email")}
+              />
             </label>
           </div>
           {/* password */}
@@ -39,15 +71,21 @@ const Login = () => {
                   clipRule="evenodd"
                 />
               </svg>
-              <input type="password" className="grow" value="password" />
+              <input
+                type="password"
+                className="grow"
+                {...register("password")}
+              />
             </label>
           </div>
-          <div></div>
+          <div>
+            {errorMessage && <p className="p-2 text-red-700">{errorMessage}</p>}
+          </div>
           {/* signup button */}
           <div className="form-control mt-6">
             <input
               type="submit"
-              value="Signup"
+              value="Login"
               className="text-white py-3 px-16 rounded-3xl border bg-yellow hover:bg-amber-400"
             />
           </div>

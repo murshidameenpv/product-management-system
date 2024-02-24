@@ -1,6 +1,39 @@
-import { Link } from "react-router-dom";
+/* eslint-disable no-unused-vars */
+import { Link, useNavigate } from "react-router-dom";
+import { useForm } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
+import { validation } from "../utils/yupValidation.js";
+import useAxiosPublic from "../hooks/useAxiosPublic";
+import { useState } from "react";
 
 const Signup = () => {
+  const axiosPublic = useAxiosPublic();
+  const [errorMessage, setErrorMessage] = useState("");
+  const navigate = useNavigate();
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    reset,
+  } = useForm({
+    resolver: yupResolver(validation),
+    autoComplete: "off",
+  });
+  const onSubmit = async (data) => {
+    try {
+      const response = await axiosPublic.post("/signup", {
+        userName: data.userName,
+        password: data.password,
+        email: data.email,
+      });
+      if (response.status === 200) navigate("/");
+      reset();
+    } catch (error) {
+      console.log(error, "Error Signing up");
+      setErrorMessage(error?.response?.data?.message);
+    }
+  };
+
   return (
     <div className="flex w-screen h-screen">
       <div
@@ -23,7 +56,7 @@ const Signup = () => {
         <h1 className="text-4xl mb-4 font-bold text-yellow mt-14">
           Create Account
         </h1>
-        <form className="card-body w-[350px]">
+        <form className="card-body w-[350px]" onSubmit={handleSubmit(onSubmit)}>
           {/* name */}
           <div className="form-control">
             <label className="input input-bordered flex items-center gap-2">
@@ -35,8 +68,18 @@ const Signup = () => {
               >
                 <path d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6ZM12.735 14c.618 0 1.093-.561.872-1.139a6.002 6.002 0 0 0-11.215 0c-.22.578.254 1.139.872 1.139h9.47Z" />
               </svg>
-              <input type="text" className="grow" placeholder="Username" />
+              <input
+                type="text"
+                className="grow"
+                placeholder="Username"
+                {...register("userName")}
+              />
             </label>
+            {errors?.userName && (
+              <p className="px-2 py-2 text-red-800">
+                {errors?.userName?.message}
+              </p>
+            )}
           </div>
           {/* Email */}
           <div className="form-control">
@@ -50,8 +93,16 @@ const Signup = () => {
                 <path d="M2.5 3A1.5 1.5 0 0 0 1 4.5v.793c.026.009.051.02.076.032L7.674 8.51c.206.1.446.1.652 0l6.598-3.185A.755.755 0 0 1 15 5.293V4.5A1.5 1.5 0 0 0 13.5 3h-11Z" />
                 <path d="M15 6.954 8.978 9.86a2.25 2.25 0 0 1-1.956 0L1 6.954V11.5A1.5 1.5 0 0 0 2.5 13h11a1.5 1.5 0 0 0 1.5-1.5V6.954Z" />
               </svg>
-              <input type="text" className="grow" placeholder="Email" />
+              <input
+                type="text"
+                className="grow"
+                placeholder="Email"
+                {...register("email")}
+              />
             </label>
+            {errors?.email && (
+              <p className="px-2 py-2 text-red-800">{errors?.email?.message}</p>
+            )}
           </div>
           {/* password */}
           <div className="form-control">
@@ -68,10 +119,19 @@ const Signup = () => {
                   clipRule="evenodd"
                 />
               </svg>
-              <input type="password" className="grow" value="password" />
+              <input
+                type="password"
+                className="grow"
+                {...register("password", { required: true })}
+              />
             </label>
+            {errors?.password && (
+              <p className="text-red-800">{errors?.password?.message}</p>
+            )}
           </div>
-          <div></div>
+          <div>
+            {errorMessage && <p className="p-2 text-red-700">{errorMessage}</p>}
+          </div>
           {/* signup button */}
           <div className="form-control mt-6">
             <input
