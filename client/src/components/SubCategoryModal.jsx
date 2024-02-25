@@ -4,10 +4,11 @@ import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import useAxiosSecure from "../hooks/useAxiosPrivate";
 import useAxiosPublic from "../hooks/useAxiosPublic";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 const SubCategoryModal = ({ categories }) => {
-  const axiosSecure = useAxiosSecure();
   const axiosPublic = useAxiosPublic();
+  const queryClient = useQueryClient();
   const [errorMessage, setErrorMessage] = useState("");
   const {
     register,
@@ -16,16 +17,34 @@ const SubCategoryModal = ({ categories }) => {
     reset,
   } = useForm();
 
-  const onSubmit = async (data) => {
-    try {
-      console.log(data);
-      reset();
+  const { mutate } = useMutation({
+    mutationFn: async (data) => {
+      try {
+        const response = await axiosPublic.post(
+          "/product/addSubCategory",
+          data
+        );
+        return response.data;
+      } catch (error) {
+        throw new Error(error.response.data.message);
+      }
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries(["category"]);
       document.getElementById("my_modal_5").close();
       setErrorMessage("");
-    } catch (error) {
-      console.log(error);
-      setErrorMessage(error?.response?.data?.message);
-    }
+      reset();
+    },
+    onError: (error) => {
+      setErrorMessage(error.message);
+    },
+  });
+
+  const onSubmit = (data) => {
+    mutate({
+      categoryId: data.category,
+      subCategoryName: data.subcategory,
+    });
   };
   return (
     <dialog id="my_modal_5" className="modal modal-middle sm:modal-middle">
@@ -46,7 +65,7 @@ const SubCategoryModal = ({ categories }) => {
                 {...register("category")}
               >
                 {categories.map((category, index) => (
-                  <option key={index} value={category.categoryName}>
+                  <option key={index} value={category._id}>
                     {category.categoryName}
                   </option>
                 ))}
@@ -81,6 +100,11 @@ const SubCategoryModal = ({ categories }) => {
             >
               ✕
             </button>
+            {errorMessage && (
+              <div className="text-center italic text-sm">
+                <span className="text-red-900">{errorMessage}</span>
+              </div>
+            )}
           </form>
         </div>
       </div>

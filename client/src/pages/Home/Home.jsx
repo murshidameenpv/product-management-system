@@ -1,4 +1,4 @@
-import {  useState } from "react";
+import { useState } from "react";
 import { FaChevronDown, FaChevronRight } from "react-icons/fa";
 import Cards from "../../components/Cards";
 import CategoryModal from "../../components/CategoryModal.jsx";
@@ -60,7 +60,7 @@ const Home = () => {
     tablet: false,
     smartphone: false,
   });
-  const {  data: categories = [] } = useQuery({
+  const { data: categories = [] } = useQuery({
     queryKey: ["category"],
     queryFn: async () => {
       try {
@@ -72,8 +72,8 @@ const Home = () => {
       }
     },
   });
-  const handleToggle = (category) => {
-    setOpen((prev) => ({ ...prev, [category]: !prev[category] }));
+  const handleToggle = (categoryId) => {
+    setOpen((prev) => ({ ...prev, [categoryId]: !prev[categoryId] }));
   };
 
   return (
@@ -91,26 +91,33 @@ const Home = () => {
           </p>
         </div>
         {categories.map((category) => (
-          <div key={category.categoryName} className="my-2 mx-2 px-2 py-3">
+          <div key={category._id} className="my-2 mx-2 px-2 py-3">
             <button
               className="flex justify-between items-center w-full"
-              onClick={() => handleToggle(category)}
+              onClick={() => handleToggle(category._id)}
             >
               {category.categoryName}
               <span>
-                {open[category] ? <FaChevronDown /> : <FaChevronRight />}
+                {open[category._id] ? <FaChevronDown /> : <FaChevronRight />}
               </span>
             </button>
-            {open[category] && (
+            {open[category._id] && (
               <div className="flex flex-col gap-2 px-2 py-3 mx-2">
-                <div className="flex items-center gap-3">
-                  <input type="checkbox" id="sub1" name="sub1" />
-                  <label htmlFor="sub1">Subcategory </label>
-                </div>
-                <div className="flex items-center gap-3">
-                  <input type="checkbox" id="sub2" name="sub2" />
-                  <label htmlFor="sub2">Subcategory</label>
-                </div>
+                {category.subCategories.map((subCategory) => (
+                  <div
+                    className="flex items-center gap-3"
+                    key={subCategory._id}
+                  >
+                    <input
+                      type="checkbox"
+                      id={subCategory._id}
+                      name={subCategory._id}
+                    />
+                    <label htmlFor={subCategory._id}>
+                      {subCategory.subCategoryName}
+                    </label>
+                  </div>
+                ))}
               </div>
             )}
           </div>
