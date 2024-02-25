@@ -1,27 +1,26 @@
+/* eslint-disable react/prop-types */
 /* eslint-disable no-unused-vars */
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
+import useAxiosSecure from "../hooks/useAxiosPrivate";
+import useAxiosPublic from "../hooks/useAxiosPublic";
 
-const SubCategoryModal = () => {
+const SubCategoryModal = ({ categories }) => {
+  const axiosSecure = useAxiosSecure();
+  const axiosPublic = useAxiosPublic();
   const [errorMessage, setErrorMessage] = useState("");
-  const categories = [
-    "Electronics",
-    "Books",
-    "Clothing",
-    "Home Decor",
-    "Sports",
-  ];
   const {
     register,
     handleSubmit,
     formState: { errors },
     reset,
   } = useForm();
+
   const onSubmit = async (data) => {
     try {
       console.log(data);
       reset();
-      document.getElementById("my_modal_6").close();
+      document.getElementById("my_modal_5").close();
       setErrorMessage("");
     } catch (error) {
       console.log(error);
@@ -47,8 +46,8 @@ const SubCategoryModal = () => {
                 {...register("category")}
               >
                 {categories.map((category, index) => (
-                  <option key={index} value={category}>
-                    {category}
+                  <option key={index} value={category.categoryName}>
+                    {category.categoryName}
                   </option>
                 ))}
               </select>

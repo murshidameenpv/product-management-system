@@ -1,67 +1,81 @@
-import { useState } from "react";
+import {  useState } from "react";
 import { FaChevronDown, FaChevronRight } from "react-icons/fa";
 import Cards from "../../components/Cards";
 import CategoryModal from "../../components/CategoryModal.jsx";
 import SubCategoryModal from "../../components/SubCategoryModal.jsx";
 import AddProduct from "../../components/AddProduct.jsx";
+import { useQuery } from "@tanstack/react-query";
+import useAxiosPublic from "../../hooks/useAxiosPublic.jsx";
+const products = [
+  {
+    id: 1,
+    name: "Product 1",
+    image:
+      "https://cdn.pixabay.com/photo/2023/03/27/16/24/sports-car-7881150_1280.jpg",
+    price: "455",
+  },
+  {
+    id: 2,
+    name: "Product 2",
+    image: "https://via.placeholder.com/150",
+    price: "455",
+  },
+  {
+    id: 3,
+    name: "Product 3",
+    image: "https://via.placeholder.com/150",
+    price: "455",
+  },
+  {
+    id: 4,
+    name: "Product 2",
+    image: "https://via.placeholder.com/150",
+    price: "455",
+  },
+  {
+    id: 5,
+    name: "Product 22",
+    image: "https://via.placeholder.com/150",
+    price: "455",
+  },
+  {
+    id: 6,
+    name: "Product 2",
+    image: "https://via.placeholder.com/150",
+    price: "455",
+  },
+  {
+    id: 7,
+    name: "Product 3",
+    image: "https://via.placeholder.com/150",
+    price: "455",
+  },
+];
 const Home = () => {
+  const axiosPublic = useAxiosPublic();
+
   const [open, setOpen] = useState({
     all: false,
     laptop: false,
     tablet: false,
     smartphone: false,
   });
-
+  const {  data: categories = [] } = useQuery({
+    queryKey: ["category"],
+    queryFn: async () => {
+      try {
+        const response = await axiosPublic.get("/product/categories");
+        return response.data;
+      } catch (error) {
+        console.error(error);
+        throw new Error("Network response was not ok");
+      }
+    },
+  });
   const handleToggle = (category) => {
     setOpen((prev) => ({ ...prev, [category]: !prev[category] }));
   };
 
-  const categories = ["All", "Laptop", "Tablet", "Smartphone"];
-  const products = [
-    {
-      id: 1,
-      name: "Product 1",
-      image:
-        "https://cdn.pixabay.com/photo/2023/03/27/16/24/sports-car-7881150_1280.jpg",
-      price: "455",
-    },
-    {
-      id: 2,
-      name: "Product 2",
-      image: "https://via.placeholder.com/150",
-      price: "455",
-    },
-    {
-      id: 3,
-      name: "Product 3",
-      image: "https://via.placeholder.com/150",
-      price: "455",
-    },
-    {
-      id: 4,
-      name: "Product 2",
-      image: "https://via.placeholder.com/150",
-      price: "455",
-    },
-    {
-      id: 5,
-      name: "Product 22",
-      image: "https://via.placeholder.com/150",
-      price: "455",
-    },
-    {
-      id: 6,
-      name: "Product 2",
-      image: "https://via.placeholder.com/150",
-      price: "455",
-    },
-    {
-      id: 7,
-      name: "Product 3",
-      image: "https://via.placeholder.com/150",
-      price: "455",
-    },
-  ];
   return (
     <div className="h-screen grid grid-cols-12">
       <div className="col-span-2 px-4 py-8 overflow-auto">
@@ -77,12 +91,12 @@ const Home = () => {
           </p>
         </div>
         {categories.map((category) => (
-          <div key={category} className="my-2 mx-2 px-2 py-3">
+          <div key={category.categoryName} className="my-2 mx-2 px-2 py-3">
             <button
               className="flex justify-between items-center w-full"
               onClick={() => handleToggle(category)}
             >
-              {category}
+              {category.categoryName}
               <span>
                 {open[category] ? <FaChevronDown /> : <FaChevronRight />}
               </span>
@@ -124,7 +138,7 @@ const Home = () => {
           </button>
         </div>
         <CategoryModal />
-        <SubCategoryModal />
+        <SubCategoryModal categories={categories} />
         <AddProduct />
         <div className="grid grid-cols-3 gap-4 justify-items-center pt-16 mx-3 px-3 py-2 ">
           {products.map((product) => (
