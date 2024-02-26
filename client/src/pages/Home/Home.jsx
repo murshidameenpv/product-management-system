@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { FaChevronDown, FaChevronRight } from "react-icons/fa";
 import Cards from "../../components/Cards";
 import CategoryModal from "../../components/CategoryModal.jsx";
@@ -9,15 +9,11 @@ import useAxiosPublic from "../../hooks/useAxiosPublic.jsx";
 
 const Home = () => {
   const axiosPublic = useAxiosPublic();
+  const [filteredProducts, setFilteredProducts] = useState([]);
+  const [selectedSubCategory, setSelectedSubCategory] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage] = useState(6);
-
-  const [open, setOpen] = useState({
-    all: false,
-    laptop: false,
-    tablet: false,
-    smartphone: false,
-  });
+  const [open, setOpen] = useState(false);
   const { data: categories = [] } = useQuery({
     queryKey: ["category"],
     queryFn: async () => {
@@ -48,10 +44,38 @@ const Home = () => {
     setOpen((prev) => ({ ...prev, [categoryId]: !prev[categoryId] }));
   };
 
+  //for shwoing all products initiallu
+  useEffect(() => {
+    if (products) setFilteredProducts(products);
+  }, [products]);
+
+  const filterItems = (selectedId, event) => {
+    if (event.target.type === "checkbox") {
+      if (event.target.checked) {
+        setSelectedSubCategory(selectedId);
+        const newFilteredProducts = products.filter((product) => {
+          return (
+            product.category === selectedId ||
+            product.subCategory === selectedId
+          );
+        });
+        setFilteredProducts(newFilteredProducts);
+      } else {
+        // Reset selectedSubCategory when a checkbox is unchecked
+        setSelectedSubCategory(null);
+        const newFilteredProducts = products.filter((product) => {
+          return product.category === event.target.name;
+        });
+        setFilteredProducts(newFilteredProducts);
+      }
+    }
+    setCurrentPage(1);
+  };
+
   //pagination
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  const currentItem = products.slice(indexOfFirstItem, indexOfLastItem);
+  const currentItem = filteredProducts.slice(indexOfFirstItem, indexOfLastItem);
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
   return (
@@ -72,7 +96,10 @@ const Home = () => {
           <div key={category._id} className="my-2 mx-2 px-2 py-3">
             <button
               className="flex justify-between items-center w-full"
-              onClick={() => handleToggle(category._id)}
+              onClick={(event) => {
+                handleToggle(category._id);
+                filterItems(category._id, event);
+              }}
             >
               {category.categoryName}
               <span>
@@ -89,7 +116,9 @@ const Home = () => {
                     <input
                       type="checkbox"
                       id={subCategory._id}
-                      name={subCategory._id}
+                      name={category._id}
+                      checked={selectedSubCategory === subCategory._id}
+                      onClick={(event) => filterItems(subCategory._id, event)}
                     />
                     <label htmlFor={subCategory._id}>
                       {subCategory.subCategoryName}
@@ -133,7 +162,7 @@ const Home = () => {
         {/* paginaton  */}
         <div className="flex items-center justify-center">
           {Array.from({
-            length: Math.ceil(products.length / itemsPerPage),
+            length: Math.ceil(filteredProducts.length / itemsPerPage),
           }).map((_, index) => (
             <button
               key={index + 1}
