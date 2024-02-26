@@ -6,6 +6,8 @@ import SubCategoryModal from "../../components/SubCategoryModal.jsx";
 import AddProduct from "../../components/AddProduct.jsx";
 import { useQuery } from "@tanstack/react-query";
 import useAxiosPublic from "../../hooks/useAxiosPublic.jsx";
+import axios from "axios";
+
 
 const Home = () => {
   const axiosPublic = useAxiosPublic();
@@ -18,7 +20,7 @@ const Home = () => {
     queryKey: ["category"],
     queryFn: async () => {
       try {
-        const response = await axiosPublic.get("/product/categories");
+        const response = await axios.get("/product/categories");
         return response.data;
       } catch (error) {
         console.error(error);
