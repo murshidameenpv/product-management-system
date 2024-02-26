@@ -2,7 +2,6 @@
 import { useState } from "react";
 import { FaHeart, FaStar } from "react-icons/fa";
 import { Link } from "react-router-dom";
-
 const Cards = ({ product }) => {
   const [isHeartFilled, setHeartFilled] = useState(false);
   const [isHovered, setHovered] = useState(false);
@@ -20,8 +19,8 @@ const Cards = ({ product }) => {
         >
           <img
             className="w-full h-64 object-cover rounded-t-lg"
-            src={product.image}
-            alt={product.name}
+            src={product.images[0]} // Change this line
+            alt={product.productName} // Change this line
           />
           {isHovered && (
             <div className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center text-white text-xl">
@@ -41,7 +40,7 @@ const Cards = ({ product }) => {
       </div>
       <div className="mt-4">
         <Link to={`/menu/${product._id}`}>
-          <h2 className="card-title">{product.name}</h2>
+          <h2 className="card-title">{product.productName}</h2> 
         </Link>
         <div>
           <p className="text-lg font-semibold">{product.price}</p>

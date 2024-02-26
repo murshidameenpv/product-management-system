@@ -6,53 +6,11 @@ import SubCategoryModal from "../../components/SubCategoryModal.jsx";
 import AddProduct from "../../components/AddProduct.jsx";
 import { useQuery } from "@tanstack/react-query";
 import useAxiosPublic from "../../hooks/useAxiosPublic.jsx";
-const products = [
-  {
-    id: 1,
-    name: "Product 1",
-    image:
-      "https://cdn.pixabay.com/photo/2023/03/27/16/24/sports-car-7881150_1280.jpg",
-    price: "455",
-  },
-  {
-    id: 2,
-    name: "Product 2",
-    image: "https://via.placeholder.com/150",
-    price: "455",
-  },
-  {
-    id: 3,
-    name: "Product 3",
-    image: "https://via.placeholder.com/150",
-    price: "455",
-  },
-  {
-    id: 4,
-    name: "Product 2",
-    image: "https://via.placeholder.com/150",
-    price: "455",
-  },
-  {
-    id: 5,
-    name: "Product 22",
-    image: "https://via.placeholder.com/150",
-    price: "455",
-  },
-  {
-    id: 6,
-    name: "Product 2",
-    image: "https://via.placeholder.com/150",
-    price: "455",
-  },
-  {
-    id: 7,
-    name: "Product 3",
-    image: "https://via.placeholder.com/150",
-    price: "455",
-  },
-];
+
 const Home = () => {
   const axiosPublic = useAxiosPublic();
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage] = useState(6);
 
   const [open, setOpen] = useState({
     all: false,
@@ -72,9 +30,29 @@ const Home = () => {
       }
     },
   });
+
+  const { data: products = [] } = useQuery({
+    queryKey: ["products"],
+    queryFn: async () => {
+      try {
+        const response = await axiosPublic.get("/product/getProducts");
+        return response.data;
+      } catch (error) {
+        console.error(error);
+        throw new Error("Network response was not ok");
+      }
+    },
+  });
+
   const handleToggle = (categoryId) => {
     setOpen((prev) => ({ ...prev, [categoryId]: !prev[categoryId] }));
   };
+
+  //pagination
+  const indexOfLastItem = currentPage * itemsPerPage;
+  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+  const currentItem = products.slice(indexOfFirstItem, indexOfLastItem);
+  const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
   return (
     <div className="h-screen grid grid-cols-12">
@@ -146,10 +124,28 @@ const Home = () => {
         </div>
         <CategoryModal />
         <SubCategoryModal categories={categories} />
-        <AddProduct />
+        <AddProduct categories={categories} />
         <div className="grid grid-cols-3 gap-4 justify-items-center pt-16 mx-3 px-3 py-2 ">
-          {products.map((product) => (
+          {currentItem.map((product) => (
             <Cards key={product.id} product={product} />
+          ))}
+        </div>
+        {/* paginaton  */}
+        <div className="flex items-center justify-center">
+          {Array.from({
+            length: Math.ceil(products.length / itemsPerPage),
+          }).map((_, index) => (
+            <button
+              key={index + 1}
+              onClick={() => paginate(index + 1)}
+              className={`mx-1 px-3 py-1 rounded-full ${
+                currentPage === index + 1
+                  ? "bg-yellow text-white"
+                  : "bg-gray-400"
+              }`}
+            >
+              {index + 1}
+            </button>
           ))}
         </div>
       </div>
