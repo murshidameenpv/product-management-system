@@ -2,7 +2,6 @@ import express from "express";
 import dotenv from "dotenv";
 import cors from "cors";
 import "./src/db/db.js";
-import cookieParser from "cookie-parser";
 import userRoute from "./src/routes/userRoutes.js";
 import authRoute from "./src/routes/authRoute.js";
 import productRoute from "./src/routes/productRoute.js";
@@ -17,11 +16,15 @@ dotenv.config();
 const port = process.env.PORT || 3001;
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "../client/dist")));
 app.get("*", (req, res) => {
   res.sendFile(path.join(__dirname, "client", "dist", "index.html"));
 });
+app.use(
+  cors({
+    origin: "https://product-management-system-sgdt.onrender.com",
+  })
+);
 //user
 app.use("/api", userRoute);
 app.use("/jwt", authRoute);
