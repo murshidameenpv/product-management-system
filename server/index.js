@@ -6,7 +6,12 @@ import cookieParser from "cookie-parser";
 import userRoute from "./src/routes/userRoutes.js";
 import authRoute from "./src/routes/authRoute.js";
 import productRoute from "./src/routes/productRoute.js";
-import path from "path";
+import path, { dirname } from "path";
+import { fileURLToPath } from "url";
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+
 const app = express();
 dotenv.config();
 const port = process.env.PORT || 3001;
