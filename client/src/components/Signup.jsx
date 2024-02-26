@@ -5,7 +5,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { validation } from "../utils/yupValidation.js";
 import { useState } from "react";
 import useAuth from "../hooks/useAuth.jsx";
-import bgImage from '../../public/bg.png'
+import bgImage from '/bg.png'
 
 const Signup = () => {
   const {createUser,user} = useAuth()

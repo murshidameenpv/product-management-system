@@ -1,7 +1,7 @@
 /* eslint-disable no-unused-vars */
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
-import bgImage from "../../public/bg.png";
+import bgImage from "/bg.png";
 
 import { useState } from "react";
 import useAuth from "../hooks/useAuth.jsx";
