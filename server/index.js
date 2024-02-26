@@ -15,11 +15,7 @@ const app = express();
 dotenv.config();
 const port = process.env.PORT || 3001;
 app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
-app.use(express.static(path.join(__dirname, "../client/dist")));
-app.get("*", (req, res) => {
-  res.sendFile(path.join(__dirname, "client", "dist", "index.html"));
-});
+app.use(express.urlencoded({ extended: false }));
 app.use(
   cors({
     origin: "https://product-management-system-sgdt.onrender.com",
@@ -30,6 +26,11 @@ app.use("/api", userRoute);
 app.use("/jwt", authRoute);
 //product
 app.use("/product", productRoute);
+
+app.use(express.static(path.join(__dirname, "../client/dist")));
+app.get("*", (req, res) => {
+  res.sendFile(path.join(__dirname, "client", "dist", "index.html"));
+});
 
 app.listen(port, () => {
   console.log(`Server Listening on port http://localhost:${port}`);
