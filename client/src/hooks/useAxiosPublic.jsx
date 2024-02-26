@@ -1,6 +1,6 @@
 import axios from "axios";
 const axiosPublic = axios.create({
-  baseURL: "http://localhost:3000",
+  baseURL: "https://product-management-system-sgdt.onrender.com",
 });
 function useAxiosPublic() {
   return axiosPublic;

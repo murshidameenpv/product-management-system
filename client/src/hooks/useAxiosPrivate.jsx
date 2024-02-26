@@ -1,7 +1,7 @@
 import axios from "axios";
 import { useNavigate } from "react-router";
 const axiosSecure = axios.create({
-  baseURL: "http://localhost:3000",
+  baseURL: "https://product-management-system-sgdt.onrender.com",
 });
 function useAxiosSecure() {
   const navigate = useNavigate();

@@ -23,7 +23,9 @@ const router = createBrowserRouter([
         path: "/product/:id",
         element: <ProductDetails />,
         loader: ({ params }) =>
-          fetch(`http://localhost:3000/product/${params.id}`),
+          fetch(
+            `https://product-management-system-sgdt.onrender.com/${params.id}`
+          ),
       },
     ],
   },
