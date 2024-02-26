@@ -1,16 +1,11 @@
+/* eslint-disable react/prop-types */
 import { FaChevronRight, FaHeart, FaMinus, FaPlus } from "react-icons/fa";
-import { Link } from "react-router-dom";
+import { Link, useLoaderData } from "react-router-dom";
 import { MdCheck } from "react-icons/md";
 import { useState } from "react";
 const ProductDetails = () => {
-  // Dummy product data
-  const product = {
-    name: "Sample Product",
-    price: "$99.99",
-    stock: 10,
-    image:
-      "https://e7.pngegg.com/pngimages/398/672/png-clipart-gray-acer-laptop-laptop-laptop-notebook-electronics-gadget.png", // Replace with your image URL
-  };
+  const product = useLoaderData();
+  console.log(product, "ppppppppppp");
   const [quantity, setQuantity] = useState(1);
   const [selectedRam, setSelectedRam] = useState("8GB");
   const handleDecrease = () => {
@@ -33,25 +28,25 @@ const ProductDetails = () => {
         <div className="flex flex-col items-center gap-4">
           <img
             className="w-3/4 h-[50%] object-cover rounded-lg border border-black"
-            src={product.image}
+            src={product.images[0]}
             alt={product.name}
           />
           <div className="grid grid-cols-2 gap-4 mt-4 w-3/4">
             <img
               className="w-full h-32 object-cover rounded-lg border border-black"
-              src={product.image}
+              src={product.images[1]}
               alt={product.name}
             />
             <img
               className="w-full h-32 object-cover rounded-lg border border-black"
-              src={product.image}
+              src={product.images[2]}
               alt={product.name}
             />
           </div>
         </div>
       </div>
       <div className="px-4 py-8 overflow-auto flex flex-col items-start justify-center">
-        <h1 className="text-2xl font-bold">{product.name}</h1>
+        <h1 className="text-2xl font-bold">{product.productName}</h1>
         <p className="text-xl font-semibold mt-2">{product.price}</p>
         <p className="text-sm italic font-semibold mt-2 flex items-center text-black">
           Availability : <MdCheck className="text-green-700" />{" "}

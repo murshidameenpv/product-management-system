@@ -27,28 +27,39 @@ export const addProduct = async (req, res) => {
 
     await newProduct.save();
 
-    res
-      .status(200)
-      .json({ message: "Product added successfully"});
+    res.status(200).json({ message: "Product added successfully" });
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: "Error adding product" });
   }
 };
 
-
 export const getAllProducts = async (req, res) => {
-    try {
-        const products = await productDb.find({});
-        if (!products) {
-            return res.status(404).json({ message: "Products not found" });
-        }
-        res.status(200).json(products);
-    } catch (error) {
-        console.error(error);
-        res.status(500).json({ message: "Error fetching products" });
+  try {
+    const products = await productDb.find({});
+    if (!products) {
+      return res.status(404).json({ message: "Products not found" });
     }
-}
+    res.status(200).json(products);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Error fetching products" });
+  }
+};
+
+export const getProduct = async (req, res) => {
+  const productId = req.params.id;
+  try {
+    const product = await productDb.findById(productId);
+    if (!product) {
+      return res.status(404).json({ message: "Product not found" });
+    }
+    res.status(200).json(product);
+  } catch (error) {
+    console.error();
+    res.status(500).json({ message: "Error fetching product" });
+  }
+};
 
 export const addCategory = async (req, res) => {
   try {
@@ -99,4 +110,4 @@ export const addSubCategory = async (req, res) => {
     console.error(error);
     res.status(500).json({ message: "Error adding subcategory" });
   }
-}
+};

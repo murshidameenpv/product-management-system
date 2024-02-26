@@ -12,15 +12,15 @@ const Cards = ({ product }) => {
     <div className="max-w-xl rounded-lg border border-black p-6 m-4">
       <div className="relative">
         <Link
-          to={`/`}
+          to={`/product/${product._id}`}
           className="hover:scale-105 transition-all duration-200"
           onMouseEnter={() => setHovered(true)}
           onMouseLeave={() => setHovered(false)}
         >
           <img
             className="w-full h-64 object-cover rounded-t-lg"
-            src={product.images[0]} // Change this line
-            alt={product.productName} // Change this line
+            src={product.images[0]}
+            alt={product.productName}
           />
           {isHovered && (
             <div className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center text-white text-xl">
@@ -39,8 +39,8 @@ const Cards = ({ product }) => {
         </div>
       </div>
       <div className="mt-4">
-        <Link to={`/menu/${product._id}`}>
-          <h2 className="card-title">{product.productName}</h2> 
+        <Link to={`/product/${product._id}`}>
+          <h2 className="card-title">{product.productName}</h2>
         </Link>
         <div>
           <p className="text-lg font-semibold">{product.price}</p>
