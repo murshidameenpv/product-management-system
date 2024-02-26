@@ -18,10 +18,7 @@ const port = process.env.PORT || 3001;
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(
-  cors({
-    origin: "https://product-management-system-sgdt.onrender.com",
-    credentials: true,
-  })
+  cors()
 );
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "../client/dist")));

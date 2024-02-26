@@ -5,6 +5,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { validation } from "../utils/yupValidation.js";
 import { useState } from "react";
 import useAuth from "../hooks/useAuth.jsx";
+import bgImage from '../../public/bg.png'
 
 const Signup = () => {
   const {createUser,user} = useAuth()
@@ -38,7 +39,7 @@ const Signup = () => {
     <div className="flex w-screen h-screen">
       <div
         className="w-2/5 bg-cover bg-center flex items-center justify-center"
-        style={{ backgroundImage: 'url("../../public/bg.png")' }}
+        style={{ backgroundImage: `url(${bgImage})` }}
       >
         <div className="p-10 text-white flex flex-col items-center justify-center">
           <h1 className="text-4xl font-bold mb-4">WELCOME BACK</h1>

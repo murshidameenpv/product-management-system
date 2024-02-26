@@ -1,6 +1,7 @@
 /* eslint-disable no-unused-vars */
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
+import bgImage from "../../public/bg.png";
 
 import { useState } from "react";
 import useAuth from "../hooks/useAuth.jsx";
@@ -26,10 +27,10 @@ const Login = () => {
       setErrorMessage(error?.response?.data?.message);
     }
   };
-    if (user) {
-      navigate("/");
-      return null;
-    }
+  if (user) {
+    navigate("/");
+    return null;
+  }
   return (
     <div className="flex w-screen h-screen">
       <div className="w-3/5 p-10 flex items-center justify-center flex-col">
@@ -95,7 +96,7 @@ const Login = () => {
       </div>
       <div
         className="w-2/5 bg-cover bg-center flex items-center justify-center"
-        style={{ backgroundImage: 'url("../../public/bg.png")' }}
+        style={{ backgroundImage: `url(${bgImage})` }}
       >
         <div className="p-10 text-white flex flex-col items-center justify-center">
           <h1 className="text-4xl font-bold mb-4">Hello Friend!</h1>
