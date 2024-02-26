@@ -17,7 +17,13 @@ dotenv.config();
 const port = process.env.PORT || 3001;
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+<<<<<<< HEAD
 app.use(cors());
+=======
+app.use(cors({
+  origin: 'https://product-management-system-sgdt.onrender.com'
+}));
+>>>>>>> 9a3b74a7f49f5b71d6e455e31d43d7683cfd4c81
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "../client/dist")));
 app.get("*", (req, res) => {
